@@ -1,5 +1,6 @@
 import React from 'react'
 import { useGet, usePost, useDelete } from './utils'
+import { Header } from './elements'
 
 const urlDataBase = 'https://mymoney-a586c.firebaseio.com/movement/2020-10.json'
 
@@ -18,6 +19,7 @@ const App = () => {
 
   return (
     <div>
+      <Header />
       { data.loading && <p>Loading...</p> }
       { JSON.stringify(data.data) }
       <button onClick={save}>Salvar</button>
