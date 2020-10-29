@@ -1,10 +1,11 @@
-import Rest from './rest'
+import { Link } from 'react-router-dom'
+import Rest from '../../utils/rest'
 
 const baseURL = 'https://mymoney-a586c.firebaseio.com/'
 const { useGet } = Rest(baseURL)
 
 const Months = () => {
-    const data = useGet('meses')
+    const data = useGet('meses')     
 
     if(data.loading) { 
         return <span>Carregando...</span>
@@ -23,14 +24,14 @@ const Months = () => {
             </thead>
             <tbody>
                 {
-                    Object.keys(data.data).map(each => {
+                    Object.keys(data.data).map(month => {
                         return (
-                            <tr>
-                                <th scope="col">{each}</th>
-                                <th>{data.data[each].previsao_entrada}</th>
-                                <th>{data.data[each].entrada}</th>
-                                <th>{data.data[each].previsao_saida}</th>
-                                <th>{data.data[each].saida}</th>
+                            <tr key={month}>
+                                <th scope="col"><Link to={`/movimentacoes/${month}`}>{month}</Link></th>
+                                <th>{data.data[month].previsao_entrada}</th>
+                                <th>{data.data[month].entrada}</th>
+                                <th>{data.data[month].previsao_saida}</th>
+                                <th>{data.data[month].saida}</th>
                             </tr>
                         )
                     })
