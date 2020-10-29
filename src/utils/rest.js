@@ -28,36 +28,31 @@ const reducer = (state, action) => {
 const init = baseURL => {
     const useGet = resource => {
         const [data, dispatch] = useReducer(reducer, initialState)
+        const load = async () => {
+            dispatch({ type: 'REQUEST' })
+            const res = await axios.get(baseURL + resource + '.json')
+            dispatch({ type: 'SUCCESS', data: res.data })
+        }
         
         useEffect(() => {
-            dispatch({ type: 'REQUEST' })
-            
-            axios.get(baseURL + resource + '.json')
-                .then(res => {
-                  
-                    dispatch({
-                        type: 'SUCCESS',
-                        loading: false,
-                        data: res.data
-                    })
-                })
-        
+            load()
         }, [resource])
     
-        return data
+        return {
+            ...data,
+            refetch: load
+        }
     }
 
     const useDelete = () => {
         const [data, dispatch] = useReducer(reducer, initialState)
     
-        const remove = resource => {
+        const remove = async resource => {
             dispatch({ type: 'REQUEST' })
-            axios.delete(baseURL + resource + '.json')
-                .then(res => {
-                    dispatch({
-                        type: 'SUCCESS',
-                    })
-                })
+            await axios.delete(baseURL + resource + '.json')
+            dispatch({
+                type: 'SUCCESS',
+            })
         }
 
         return [data, remove]
@@ -66,16 +61,15 @@ const init = baseURL => {
     const usePost = resource => {
         const [data, dispatch] = useReducer(reducer, initialState)
     
-        const post = data => {
+        const post = async data => {
             dispatch({ type: 'REQUEST' })
-            axios.post(baseURL + resource + '.json', data)
-                .then(res => {
-                    dispatch({
-                        type: 'SUCCESS',
-                        loading: false,
-                        data: res.data
-                    })
-                })
+            const res = await axios.post(baseURL + resource + '.json', data)    
+            dispatch({
+                type: 'SUCCESS',
+                loading: false,
+                data: res.data
+            })
+                
         }
 
         return [data, post]
