@@ -15,7 +15,7 @@ const AddMonth = () => {
         return (num < 10) ? '0'+num : num
     }
     const showMonth = () => {
-        setRedir(refYear.current.value + '-' + refMonth.current.value)
+        setRedir(refYear.current.value + '-' + zeroPad(refMonth.current.value))
     }
 
     for(let index = minYear; index <= maxYear; index++) {

@@ -62,24 +62,27 @@ const Movements = ({ match }) => {
     return (
       <div className="text-uppercase">
         <h1>Movimentações</h1>
-        {data.loading && <div>Carregando...</div>}
-        <span className="font-weight-bold">
-            Entradas: { dataMonth.data.entrada } / Saidas: { dataMonth.data.saida }
-        </span>
-        <div className="d-flex">
-            <div className="">
-                <span className="">
-                    Previsão de entrada: { dataMonth.data.previsao_entrada } 
-                </span>
-                <input className="ml-2" type="number" alt="input_forecast" onBlur={changeForecast} />
-            </div>
-            <div className="ml-2">
-                <span>
-                    Previsão de saida: { dataMonth.data.previsao_saida }
-                </span>
-                <input className="ml-2" type="number" alt="exit_forecas" onBlur={changeForecast} />
+        { data.loading && <div>Carregando...</div> }
+        { dataMonth.data && <div>
+            <span className="font-weight-bold">
+                Entradas: { dataMonth.data.entrada } / Saidas: { dataMonth.data.saida }
+            </span>
+            <div className="d-flex">
+                <div className="">
+                    <span className="">
+                        Previsão de entrada: { dataMonth.data.previsao_entrada } 
+                    </span>
+                    <input className="ml-2" type="number" alt="input_forecast" onBlur={changeForecast} />
+                </div>
+                <div className="ml-2">
+                    <span>
+                        Previsão de saida: { dataMonth.data.previsao_saida }
+                    </span>
+                    <input className="ml-2" type="number" alt="exit_forecas" onBlur={changeForecast} />
+                </div>
             </div>
         </div>
+        }
         <table class="table mt-2">
             <thead class="thead-light">
                 <tr>
