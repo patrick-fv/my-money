@@ -27,6 +27,7 @@ const Movements = ({ match }) => {
             })
             setDescribe('')
             setValue(0.0)
+            await sleep(1000)
             data.refetch()
             dataMonth.refetch()
         }
@@ -68,8 +69,8 @@ const Movements = ({ match }) => {
                 Entradas: { dataMonth.data.entrada } / Saidas: { dataMonth.data.saida }
             </span>
             <div className="d-flex">
-                <div className="">
-                    <span className="">
+                <div>
+                    <span>
                         Previsão de entrada: { dataMonth.data.previsao_entrada } 
                     </span>
                     <input className="ml-2" type="number" alt="input_forecast" onBlur={changeForecast} />
@@ -83,8 +84,8 @@ const Movements = ({ match }) => {
             </div>
         </div>
         }
-        <table class="table mt-2">
-            <thead class="thead-light">
+        <table className="table mt-2">
+            <thead className="thead-light">
                 <tr>
                     <th scope="col">Descrição</th>
                     <th scope="col" className="text-right">Valor</th>
@@ -103,13 +104,13 @@ const Movements = ({ match }) => {
                         )
                     })
                 }
-                <div className="w-100">
-                    <input type="text" value={describe} onChange={onChangeDescribe}/>
-                    <input className="ml-2" type="number" value={value} onChange={onChangeValue}/>
-                    <button className="btn btn-success ml-2" onClick={saveMovement}>+</button>
-                </div>
             </tbody>
-        </table>
+            </table>
+            <div className="">
+                <input type="text" value={describe} onChange={onChangeDescribe}/>
+                <input className="ml-2" type="number" value={value} onChange={onChangeValue}/>
+                <button className="btn btn-success ml-2" onClick={saveMovement}>+</button>
+            </div>
       </div>
     )
 }

@@ -12,8 +12,8 @@ const Months = () => {
     }
 
     return (
-        <table class="table">
-            <thead class="thead-light">
+        <table className="table mt-2 text-uppercase">
+            <thead className="thead-light">
                 <tr>
                     <th scope="col">Mês</th>
                     <th scope="col">Previsão entrada</th>

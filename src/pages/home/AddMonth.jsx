@@ -45,7 +45,7 @@ const AddMonth = () => {
                     })
                 }
             </select>
-            <button className="ml-2" onClick={showMonth}>Adicionar Mês</button>
+            <button className="ml-2 btn btn-primary text-uppercase" onClick={showMonth}>Adicionar</button>
         </React.Fragment>
     )
 }
