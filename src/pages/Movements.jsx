@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Rest from '../utils/rest'
 
 const baseURL = 'https://mymoney-a586c.firebaseio.com/'
-const { useGet, usePost, useDelete } = Rest(baseURL)
+const { useGet, usePost, useDelete, usePatch } = Rest(baseURL)
 
 const Movements = ({ match }) => {
     const data = useGet(`movimentacoes/${match.params.data}`)
+    const dataMonth = useGet(`meses/${match.params.data}`)
+    const [dataPatch, patch] = usePatch()
     const [postData, save] = usePost(`movimentacoes/${match.params.data}`)
     const [removeData, remove] = useDelete()
     const [describe, setDescribe] = useState('')
@@ -26,18 +28,59 @@ const Movements = ({ match }) => {
             setDescribe('')
             setValue(0.0)
             data.refetch()
+            dataMonth.refetch()
         }
     }
     const removeMovement = async id => {
         await remove(`movimentacoes/${match.params.data}/${id}`)
+        await sleep(1000)
         data.refetch()
+        dataMonth.refetch()
     }
-    
+    const changeForecast = ({ currentTarget }) => {
+        if(!currentTarget.value) return
+        var sendPatch = {}
+        switch(currentTarget.alt) {
+            case 'input_forecast':
+                sendPatch.previsao_entrada = parseFloat(currentTarget.value)
+                break
+            case 'exit_forecast':
+                sendPatch.previsao_saida = parseFloat(currentTarget.value)
+                break
+            default:
+                console.warn(`${currentTarget} not supported`)
+        }
+
+        patch(`meses/${match.params.data}`, sendPatch)
+    }
+    const sleep = time => new Promise(resolve => setTimeout(resolve, time))
+
+    useEffect(() => {
+        dataMonth.refetch()
+    }, [dataPatch])
+
     return (
-      <div>
+      <div className="text-uppercase">
         <h1>Movimentações</h1>
         {data.loading && <div>Carregando...</div>}
-        <table class="table">
+        <span className="font-weight-bold">
+            Entradas: { dataMonth.data.entrada } / Saidas: { dataMonth.data.saida }
+        </span>
+        <div className="d-flex">
+            <div className="">
+                <span className="">
+                    Previsão de entrada: { dataMonth.data.previsao_entrada } 
+                </span>
+                <input className="ml-2" type="number" alt="input_forecast" onBlur={changeForecast} />
+            </div>
+            <div className="ml-2">
+                <span>
+                    Previsão de saida: { dataMonth.data.previsao_saida }
+                </span>
+                <input className="ml-2" type="number" alt="exit_forecas" onBlur={changeForecast} />
+            </div>
+        </div>
+        <table class="table mt-2">
             <thead class="thead-light">
                 <tr>
                     <th scope="col">Descrição</th>
@@ -57,15 +100,11 @@ const Movements = ({ match }) => {
                         )
                     })
                 }
-                <tr>
-                    <th>
-                        <input type="text" value={describe} onChange={onChangeDescribe}/>
-                    </th>
-                    <th>
-                        <input type="number" value={value} onChange={onChangeValue}/>
-                        <button className="btn btn-success ml-2" onClick={saveMovement}>+</button>
-                    </th>
-                </tr>
+                <div className="w-100">
+                    <input type="text" value={describe} onChange={onChangeDescribe}/>
+                    <input className="ml-2" type="number" value={value} onChange={onChangeValue}/>
+                    <button className="btn btn-success ml-2" onClick={saveMovement}>+</button>
+                </div>
             </tbody>
         </table>
       </div>
